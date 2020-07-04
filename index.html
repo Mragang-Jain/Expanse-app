@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">Xpers</span>
+        <span class="navbar-brand mb-0 h1" id="headingtotal" ></span>
+    </nav>
+
+    <div class="container-fluid bg-light" style="min-height: 100vh">
+        <div class="container">
+            <h1 id="headingtotal"></h1>
+            <!--BOOTSTRAP-->
+            <div class="jumbotron mt-4">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="inputAmount" placeholder="Amount spent"
+                        aria-label="Amount spent" aria-describedby="spent in rupee" />
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="spent in rupee">₹</span>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="spent at">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="inputdesc" placeholder="spent On" aria-label="spent On"
+                        aria-describedby="spent at" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="button" id="btnAddExpense">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Bootstrap End-->
+
+            <div>
+                <ul class="list-group" id="expenseTable">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // read value from inputAmount
+        const inputElement = document.querySelector("#inputAmount");
+        const inputText = document.querySelector("#inputdesc");
+        const expenseTableE = document.querySelector("#expenseTable");
+        // intvalue of expense at 0
+        let Totalexpense = 0;
+
+        //get element
+        const headingE = document.querySelector("#headingtotal");
+        //headingE.textContent = Totalexpense;
+
+        const allExpenses = [];
+
+        // onButtononclick add inputamount to Totalexpense
+        function addExpenseToTotal() {
+            const textAmount = inputElement.value;
+            //console.log({textAmount});
+
+            const expenseItem = {};
+
+            const expense = parseInt(textAmount, 10);
+
+
+            const textDesc = inputText.value;
+            // console.log({textDesc,textAmount});
+
+            expenseItem.desc = textDesc;
+            expenseItem.amount = expense;
+            expenseItem.moment=  new Date();
+
+            allExpenses.push(expenseItem);
+
+            //console.clear();
+            // console.table(allExpenses);
+
+            Totalexpense = Totalexpense + expense;
+            // set value
+            // headingE.textContent=Totalexpense;
+            //console.log({Totalexpense}); 
+
+            const someText = `Total: ${Totalexpense}`;
+            headingE.textContent = someText;
+
+            renderList(allExpenses);
+
+        }
+
+        const element = document.querySelector("#btnAddExpense");
+        //listening toevent listner
+        element.addEventListener("click", addExpenseToTotal);
+
+        function Time(momento){
+              return momento.toLocaleDateString('en-US',{
+                  year: 'numeric', month:'long',day:'numeric',
+              })
+        }
+
+        // delete item
+       // function deleteItem(dateValue){
+           // const newArr=[]    
+         //   console.log("date item was Called", dateValue);
+           // for (let i=0; i<allExpenses.length; i++)
+            //{
+              //  if (allExpenses[i].moment.valueOf() !== dateValue)
+               // {
+                //        allExpenses.push(allExpenses[i]);
+                //}
+            //}
+
+           // const newArr =allExpenses.filter(expense => expense.moment.valueOf() !== dateValue)
+            //renderList(newArr);
+        //}
+
+        //view Layer
+        function renderList(arrOfList){
+            const allExpenseHTML = arrOfList.map(expense => createListItem(expense)); 
+            const joinedAllExpenseHTML = allExpenseHTML.join("");
+            expenseTableE.innerHTML = joinedAllExpenseHTML;
+        }
+
+        function createListItem({ desc, amount, moment }) {
+            return `<li class="list-group-item d-flex justify-content-between">
+							<div class="d-flex flex-column">
+							      ${desc}
+								<small class="text-muted">${Time(moment)}</small>
+							</div>
+							<div>
+								<span class="px-5">
+								${amount}
+								</span>
+								<button type="button" onclick= "deleteItem(${moment.valueOf()})"
+                                class="btn btn-outline-danger btn-sm">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+							</div>
+						</li>`;
+
+        }
+
+
+
+            //expenseTableE.innerHTML = tableText;
+
+    </script>
+
+    <!-- Footer -->
+<footer class="page-footer font-small cyan darken-3">
+
+    <!-- Footer Elements -->
+    <div class="container">
+  
+      <!-- Grid row-->
+      <div class="row">
+  
+        <!-- Grid column -->
+        <div class="col-md-12 py-5">
+          <div class="mb-5 flex-center">
+  
+           <center>
+            <!-- Twitter -->
+            <a class="tw-ic" href="https://twitter.com/MragangJ">
+              <i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!--Linkedin -->
+            <a class="li-ic" href="https://www.linkedin.com/in/mragang-jain-1b0850198/">
+              <i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+            <!--Instagram-->
+            <a class="ins-ic" href="https://www.instagram.com/jain_shankey_/">
+              <i class="fab fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+            </a>
+        </center>
+          </div>
+        </div>
+        <!-- Grid column -->
+  
+      </div>
+      <!-- Grid row-->
+  
+    </div>
+    <!-- Footer Elements -->
+  
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© Made with Love ❤️ in india 
+    </div>
+    <!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
+</body>
+
+</html>
